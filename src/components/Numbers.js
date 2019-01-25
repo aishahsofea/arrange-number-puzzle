@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Selections from './Selections';
 
-let shuffleArray = (array) => {
+const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
@@ -18,6 +18,7 @@ class Numbers extends Component {
       cols: [1, 2, 3, 1, 2, 3, 1, 2, 3],
     }
     this.shuffleNumbers = this.shuffleNumbers.bind(this);
+    this.changeGridSize = this.changeGridSize.bind(this);
   }
 
   shuffleNumbers() {
@@ -36,6 +37,30 @@ class Numbers extends Component {
     
   }
 
+  changeGridSize() {
+    let size = Number(document.querySelector('#size').value);
+    const numbers = [];
+    const rows = [];
+    const cols = [];
+
+    for (let i=1; i < (size**2); i++ ) {
+      numbers.push(i);
+    }
+    
+    for (let i=1; i <= size; i++) {
+      rows.push(...Array(size).fill(i));
+      cols.push((i));
+    }
+
+    this.setState({
+      numbers: shuffleArray(numbers.concat([''])),
+      rows: rows,
+      cols: Array(size).fill(cols).flat()
+    })
+    
+    this.props.changeGridSize();
+  }
+
   componentDidMount() {
     this.shuffleNumbers()
   }
@@ -44,7 +69,7 @@ class Numbers extends Component {
     console.log(this.state)   
     return (
       <div>
-        <Selections/>
+        <Selections changeGrid={this.changeGridSize}/>
         <button className="start-btn" onClick={this.shuffleNumbers}>Start</button>
       </div>
     )

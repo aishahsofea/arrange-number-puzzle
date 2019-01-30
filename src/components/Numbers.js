@@ -19,10 +19,15 @@ class Numbers extends Component {
     }
     this.shuffleNumbers = this.shuffleNumbers.bind(this);
     this.changeGridSize = this.changeGridSize.bind(this);
+    this.changeGridAndShuffle = this.changeGridAndShuffle.bind(this);
+    this.displayEmptySlot = this.displayEmptySlot.bind(this);
+  }
+
+  displayEmptySlot() {
+    console.log(this.state.emptySlot)
   }
 
   shuffleNumbers() {
-
     const shuffledNum = shuffleArray(this.state.numbers);
 
     for (let i=0; i < shuffledNum.length; i++) {
@@ -33,11 +38,11 @@ class Numbers extends Component {
           emptySlot: [this.state.rows[i], this.state.cols[i]]
         })
       }
-    }
-    
+    }   
   }
 
-  changeGridSize() {
+  changeGridSize(){
+    
     let size = Number(document.querySelector('#size').value);
     const numbers = [];
     const rows = [];
@@ -57,19 +62,31 @@ class Numbers extends Component {
       rows: rows,
       cols: Array(size).fill(cols).flat()
     })
-    
+
     this.props.changeGridSize();
   }
 
+  changeGridAndShuffle() {
+    new Promise((resolve, reject) => {
+      setTimeout(() => resolve(1), 50);
+    }).then(() => {
+      this.changeGridSize();
+    }).then(() => {
+      this.shuffleNumbers();
+    }).then(() => {
+      this.displayEmptySlot();
+    })
+  }
+  
   componentDidMount() {
-    this.shuffleNumbers()
+    this.shuffleNumbers();
   }
 
   render() { 
-    console.log(this.state)   
+    
     return (
       <div>
-        <Selections changeGrid={this.changeGridSize}/>
+        <Selections changeGrid={this.changeGridAndShuffle}/>
         <button className="start-btn" onClick={this.shuffleNumbers}>Start</button>
       </div>
     )

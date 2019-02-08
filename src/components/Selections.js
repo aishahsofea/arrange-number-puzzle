@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 class Selections extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       value: 3
     }

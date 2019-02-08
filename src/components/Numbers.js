@@ -1,41 +1,24 @@
-import React, { Component } from 'react';
+import React, { Component } from 'reactn';
 import Selections from './Selections';
-
-const shuffleArray = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
+import shuffleArray from './shuffleArray';
 
 class Numbers extends Component {
-  constructor() {
-    super();
-    this.state = {
-      numbers: shuffleArray([1, 2, 3, 4, 5, 6, 7, 8, '']),
-      rows: [1, 1, 1, 2, 2, 2, 3, 3, 3],
-      cols: [1, 2, 3, 1, 2, 3, 1, 2, 3],
-    }
+  constructor(props) {
+    super(props);
+
     this.shuffleNumbers = this.shuffleNumbers.bind(this);
     this.changeGridSize = this.changeGridSize.bind(this);
     this.changeGridAndShuffle = this.changeGridAndShuffle.bind(this);
-    this.displayEmptySlot = this.displayEmptySlot.bind(this);
-  }
-
-  displayEmptySlot() {
-    console.log(this.state.emptySlot)
   }
 
   shuffleNumbers() {
-    const shuffledNum = shuffleArray(this.state.numbers);
-
+    const shuffledNum = shuffleArray(this.global.numbers);
     for (let i=0; i < shuffledNum.length; i++) {
-      document.querySelector(`.row-${this.state.rows[i]} > .col-${this.state.cols[i]}`).innerHTML = `<div class="number">${shuffledNum[i]}</div>`;
+      document.querySelector(`.row-${this.global.rows[i]} > .col-${this.global.cols[i]}`).innerHTML = `<div class="number">${shuffledNum[i]}</div>`;
 
-      if (document.querySelector(`.row-${this.state.rows[i]} > .col-${this.state.cols[i]}`).innerHTML === `<div class="number"></div>`) {
-        this.setState({
-          emptySlot: [this.state.rows[i], this.state.cols[i]]
+      if (shuffledNum[i] === '') {
+        this.setGlobal({
+          emptySlot: [this.global.rows[i], this.global.cols[i]]
         })
       }
     }   
@@ -48,7 +31,7 @@ class Numbers extends Component {
     const rows = [];
     const cols = [];
 
-    for (let i=1; i < (size**2); i++ ) {
+    for (let i=1; i < (size**2); i++) {
       numbers.push(i);
     }
     
@@ -57,7 +40,7 @@ class Numbers extends Component {
       cols.push((i));
     }
 
-    this.setState({
+    this.setGlobal({
       numbers: shuffleArray(numbers.concat([''])),
       rows: rows,
       cols: Array(size).fill(cols).flat()
@@ -73,8 +56,6 @@ class Numbers extends Component {
       this.changeGridSize();
     }).then(() => {
       this.shuffleNumbers();
-    }).then(() => {
-      this.displayEmptySlot();
     })
   }
   

@@ -1,5 +1,5 @@
 import React from 'reactn';
-import { setGlobal } from 'reactn';
+import { setGlobal, getGlobal } from 'reactn';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
@@ -30,8 +30,12 @@ setGlobal({
         <div className="col col-2"></div>
         <div className="col col-3"></div>
       </div>
-    </div>
+    </div>,
+  number1: getGlobal()
 })
+
+
+
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -39,13 +43,3 @@ ReactDOM.render(<App />, document.getElementById('root'));
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
 serviceWorker.unregister();
-
-// onClick={this.handleClick}
-// onClick={this.handleClick}
-// onClick={this.handleClick}
-// onClick={this.handleClick}
-// onClick={this.handleClick}
-// onClick={this.handleClick}
-// onClick={this.handleClick}
-// onClick={this.handleClick}
-// onClick={this.handleClick}

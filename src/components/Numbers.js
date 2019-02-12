@@ -13,6 +13,7 @@ class Numbers extends Component {
 
   shuffleNumbers() {
     const shuffledNum = shuffleArray(this.global.numbers);
+    
     for (let i=0; i < shuffledNum.length; i++) {
       document.querySelector(`.row-${this.global.rows[i]} > .col-${this.global.cols[i]}`).innerHTML = `<div class="number">${shuffledNum[i]}</div>`;
 

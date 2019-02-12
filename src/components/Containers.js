@@ -1,51 +1,32 @@
 import React, { Component } from 'reactn';
 import Numbers from './Numbers';
-import '../App.css'
+import gameLogic from './gameLogic';
+import '../App.css';
+import shuffleArray from './shuffleArray';
 
 class Containers extends Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
-    // this.state = {
-    //   markup: 
-    //     <div>
-    //       <div className="row row-1">
-    //         <div className="col col-1" onClick={this.handleClick}></div>
-    //         <div className="col col-2" onClick={this.handleClick}></div>
-    //         <div className="col col-3" onClick={this.handleClick}></div>
-    //       </div>
-        
-    //       <div className="row row-2">
-    //         <div className="col col-1" onClick={this.handleClick}></div>
-    //         <div className="col col-2" onClick={this.handleClick}></div>
-    //         <div className="col col-3" onClick={this.handleClick}></div>
-    //       </div>
-        
-    //       <div className="row row-3">
-    //         <div className="col col-1" onClick={this.handleClick}></div>
-    //         <div className="col col-2" onClick={this.handleClick}></div>
-    //         <div className="col col-3" onClick={this.handleClick}></div>
-    //       </div>
-    //     </div>
-    // }
-    
     this.modifyGrid = this.modifyGrid.bind(this);
+
   }
 
+  handleClick = event => {
+    const row = Number(event.target.parentElement.parentElement.className.split(" ")[1].substr(-1));
+    const col = Number(event.target.parentElement.className.split(" ")[1].substr(-1));
+    console.log(`row ${row} and col ${col} => ${event.target.innerText}`);
 
-  handleClick(event) {
-    event.preventDefault();
-    const row = event.target.parentElement.parentElement.className.split(" ")[1];
-    const col = event.target.parentElement.className.split(" ")[1];
-    console.log(`${row} and ${col} => ${event.target.innerText}`);
-    console.log(this.global.emptySlot);
-
+    const arrangedNum = shuffleArray(this.global.numbers);
     
-
+    for (let i=0; i < arrangedNum.length; i++) {
+      document.querySelector(`.row-${this.global.rows[i]} > .col-${this.global.cols[i]}`).innerHTML = `<div class="number">${arrangedNum[i]}</div>`;
+    }
+ 
+    gameLogic(row, col, this.global.emptySlot);
   }
 
-
-  modifyGrid() {
+  modifyGrid = () => {
     let size = Number(document.querySelector('#size').value);
     const sizes = [];
     let colMarkup;
@@ -73,38 +54,37 @@ class Containers extends Component {
     })
 
     this.setGlobal({
-      markup: rowMarkup
+      markup: <div>{rowMarkup}</div> 
     })
   }
 
-  componentDidMount() {
-
-
-    
-    console.log(this.global.markup.props.children);
-
-
-    let newMarkup = React.Children.map(this.global.markup.props.children, arr => 
-      React.cloneElement(arr, {
-        onClick: this.handleClick
-      }))
-
-    console.log(newMarkup)
-
-    let myMarkup = React.Children.map(this.global.markup.props.children, arr => 
-      React.Children.map(arr.props.children, elem => 
+  componentWillMount() {
+    let rowArr = this.global.markup.props.children;
+    let markup;
+  
+    for (let i=0; i < rowArr.length; i++) {
+  
+      markup = React.Children.map(rowArr[i].props.children, elem => 
         React.cloneElement(elem, {
           onClick: this.handleClick
-        })))
-
-    console.log(myMarkup)
-
+        }))
+    }
+  
+    let completeMarkup = React.Children.map(rowArr, arr => 
+      React.cloneElement(arr, {
+        children: markup
+      }))
+  
+    this.setGlobal({
+      markup: completeMarkup
+    })
   }
- 
-
-
 
   render() {
+    
+
+
+
     return (
       <div>
         <Numbers changeGridSize={this.modifyGrid} />

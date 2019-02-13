@@ -1,6 +1,7 @@
 import React, { Component } from 'reactn';
 import Selections from './Selections';
 import shuffleArray from './shuffleArray';
+import assignBox from './assignBox';
 
 class Numbers extends Component {
   constructor(props) {
@@ -13,16 +14,7 @@ class Numbers extends Component {
 
   shuffleNumbers() {
     const shuffledNum = shuffleArray(this.global.numbers);
-    
-    for (let i=0; i < shuffledNum.length; i++) {
-      document.querySelector(`.row-${this.global.rows[i]} > .col-${this.global.cols[i]}`).innerHTML = `<div class="number">${shuffledNum[i]}</div>`;
-
-      if (shuffledNum[i] === '') {
-        this.setGlobal({
-          emptySlot: [this.global.rows[i], this.global.cols[i]]
-        })
-      }
-    }   
+    assignBox(shuffledNum); 
   }
 
   changeGridSize(){

@@ -1,29 +1,47 @@
 import React, { Component } from 'reactn';
 import Numbers from './Numbers';
 import gameLogic from './gameLogic';
+import assignBox from './assignBox';
+import switchNumbers from './switchNumbers';
 import '../App.css';
-import shuffleArray from './shuffleArray';
+
 
 class Containers extends Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
     this.modifyGrid = this.modifyGrid.bind(this);
+    this.isSorted = this.isSorted.bind(this);
+  }
 
+  isSorted = numArr => {
+    const nonSortedArr = numArr.join();
+    let sortedArr = [...numArr].sort().concat('').slice(1).join();
+    return nonSortedArr === sortedArr;
   }
 
   handleClick = event => {
     const row = Number(event.target.parentElement.parentElement.className.split(" ")[1].substr(-1));
     const col = Number(event.target.parentElement.className.split(" ")[1].substr(-1));
-    console.log(`row ${row} and col ${col} => ${event.target.innerText}`);
-
-    const arrangedNum = shuffleArray(this.global.numbers);
+    const clickedNum = Number(event.target.innerText);
+    let numArr = this.global.numbers;
     
-    for (let i=0; i < arrangedNum.length; i++) {
-      document.querySelector(`.row-${this.global.rows[i]} > .col-${this.global.cols[i]}`).innerHTML = `<div class="number">${arrangedNum[i]}</div>`;
+    console.log(`row ${row} and col ${col} => ${clickedNum}`);
+    console.log(numArr);
+    
+    if (gameLogic(row, col, this.global.emptySlot)) {
+      new Promise((resolve, reject) => {
+        setTimeout(() => resolve(1), 50);
+      }).then(() => {
+        assignBox(switchNumbers(numArr, clickedNum));
+      }).then(() => {
+        console.log(numArr);
+        if (this.isSorted(numArr)) {
+          console.log('you won')
+        }
+      })
+      
     }
- 
-    gameLogic(row, col, this.global.emptySlot);
   }
 
   modifyGrid = () => {

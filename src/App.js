@@ -6,7 +6,7 @@ import './App.css';
 class App extends Component {
 
   render() {
-    console.log(this.global.number1)
+    console.log(this.global)
     return (
       <div className="App">
         <Containers/>

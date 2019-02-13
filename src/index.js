@@ -1,5 +1,5 @@
 import React from 'reactn';
-import { setGlobal, getGlobal } from 'reactn';
+import { setGlobal } from 'reactn';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
@@ -31,13 +31,15 @@ setGlobal({
         <div className="col col-3"></div>
       </div>
     </div>,
-  number1: getGlobal()
 })
 
 
 
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <App />, 
+  document.getElementById('root')
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

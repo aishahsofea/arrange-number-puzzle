@@ -25,23 +25,29 @@ class Containers extends Component {
     const col = Number(event.target.parentElement.className.split(" ")[1].substr(-1));
     const clickedNum = Number(event.target.innerText);
     let numArr = this.global.numbers;
+    let emptySlot = this.global.emptySlot;
     
     console.log(`row ${row} and col ${col} => ${clickedNum}`);
     console.log(numArr);
+
+    if (col === emptySlot[1] && row === emptySlot[0]) {
+      return;
+    }
     
-    if (gameLogic(row, col, this.global.emptySlot)) {
+    if (row === emptySlot[0] || col === emptySlot[1]) { 
+      
       new Promise((resolve, reject) => {
         setTimeout(() => resolve(1), 50);
       }).then(() => {
         assignBox(switchNumbers(numArr, clickedNum));
       }).then(() => {
-        console.log(numArr);
-        if (this.isSorted(numArr)) {
-          console.log('you won')
+        console.log(this.global.numbers);
+        if (this.isSorted(this.global.numbers)) {
+          alert('you won')
         }
       })
       
-    }
+    } 
   }
 
   modifyGrid = () => {
@@ -99,9 +105,6 @@ class Containers extends Component {
   }
 
   render() {
-    
-
-
 
     return (
       <div>
